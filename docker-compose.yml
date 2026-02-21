@@ -1,0 +1,14 @@
+services:
+  audioplayer:
+    image: st4player
+    container_name: openwrt-audioplayer
+    restart: unless-stopped
+    network_mode: "host"
+    privileged: true
+    volumes:
+      - .:/app
+      - /dev/snd:/dev/snd
+      - /var/run/dbus:/var/run/dbus
+      - /tmp:/tmp
+      - /root:/root
+      - /mnt:/mnt

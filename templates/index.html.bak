@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ST4 PLAYER PRO</title>
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    
+    <meta name="theme-color" content="#050505">
+    
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/icon-192.png') }}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=FINAL_V8">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+</head>
+<body>
+
+<div class="bg-layer"></div>
+
+<div class="player-card">
+    
+    <div class="header">
+        <span class="brand" onclick="toggleTheme()">ST4 PLAYER</span>
+        <div style="display:flex; gap:8px; align-items: center;">
+            <button class="btn-ctl tiny" id="btn-output" onclick="tg('om')">
+                <i class="fa-solid fa-headphones" id="oi"></i>
+            </button>
+            
+            <button class="btn-ctl tiny" id="btn-xf" onclick="toggleCrossfeed()" style="position: relative;">
+                <i class="fa-solid fa-globe"></i>
+                <span id="xf-indicator" style="position: absolute; bottom: 2px; right: 2px; width: 6px; height: 6px; background: #ff00ff; border-radius: 50%; display: none; box-shadow: 0 0 5px #ff00ff;"></span>
+            </button>
+            
+            <button class="btn-ctl tiny" id="btn-bp" onclick="toggleBitPerfect()" style="position: relative;">
+                <i class="fa-solid fa-microchip"></i>
+                <span id="bp-indicator" style="position: absolute; bottom: 2px; right: 2px; width: 6px; height: 6px; background: #00ff00; border-radius: 50%; display: none; box-shadow: 0 0 5px #00ff00;"></span>
+            </button>
+            
+            <button class="btn-ctl tiny" id="btn-timer" onclick="tg('tm')" style="position: relative;">
+                <i class="fa-solid fa-stopwatch"></i>
+                <span id="timer-badge" style="position: absolute; top: -5px; right: -8px; background: #00d2ff; color: #000; font-size: 9px; font-weight: bold; padding: 1px 4px; border-radius: 4px; display: none;"></span>
+            </button>
+            
+            <button class="btn-ctl tiny" onclick="tg('pm')">
+                <i class="fa-solid fa-list-ul"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="dashboard-row">
+        <div class="disk-container">
+            <div class="disc-wrapper" id="discArea">
+                <img id="cover-img" src="/static/img/default.png" alt="Cover" class="album-label spinning" onerror="this.src='/static/img/default.png'">
+            </div>
+        </div>
+        
+        <div class="info-container">
+            <div class="marquee-wrapper"><h2 id="tit">Ready</h2></div>
+            <h3 id="art">ST4 Audio Engine</h3>
+            <p id="alb" class="meta-album" style="display:none;">Album Name</p>
+            
+            <div class="meta-row" id="meta-row">
+                <span id="cat-badge" class="badge" style="display:none;">UNK</span>
+                <span id="genre" class="badge" style="display:none;">Genre</span>
+                <span id="year" class="badge" style="display:none;">Year</span>
+            </div>
+            
+            <div id="tech-specs" class="meta-tech">WAITING SIGNAL...</div>
+        </div>
+    </div>
+
+    <div class="time-box">
+        <span class="time-txt" id="t-cur">0:00</span>
+        <input type="range" id="pb" min="0" max="100" value="0">
+        <span class="time-txt" id="t-tot">0:00</span>
+    </div>
+
+    <div class="console-deck">
+        <div class="deck-section eq-section">
+            <div class="deck-label">
+                <span>EQUALIZER</span>
+                <button onclick="tg('pr-om')" class="preset-link">
+                    <span id="cur-preset-txt">PRESETS</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+            </div>
+            <div class="eq-grid">
+                <div class="knob-wrap"><div class="knob-common small" id="k-f1" data-type="f1"></div><label>Sub</label><span class="eq-val" id="v-f1">0</span></div>
+                <div class="knob-wrap"><div class="knob-common small" id="k-f2" data-type="f2"></div><label>Low</label><span class="eq-val" id="v-f2">0</span></div>
+                <div class="knob-wrap"><div class="knob-common small" id="k-f3" data-type="f3"></div><label>Kick</label><span class="eq-val" id="v-f3">0</span></div>
+                <div class="knob-wrap"><div class="knob-common small" id="k-f4" data-type="f4"></div><label>Mid</label><span class="eq-val" id="v-f4">0</span></div>
+                <div class="knob-wrap"><div class="knob-common small" id="k-f5" data-type="f5"></div><label>Body</label><span class="eq-val" id="v-f5">0</span></div>
+                <div class="knob-wrap"><div class="knob-common small" id="k-f6" data-type="f6"></div><label>Vox</label><span class="eq-val" id="v-f6">0</span></div>
+                <div class="knob-wrap"><div class="knob-common small" id="k-f7" data-type="f7"></div><label>Detl</label><span class="eq-val" id="v-f7">0</span></div>
+                <div class="knob-wrap"><div class="knob-common small" id="k-f8" data-type="f8"></div><label>Pres</label><span class="eq-val" id="v-f8">0</span></div>
+                <div class="knob-wrap"><div class="knob-common small" id="k-f9" data-type="f9"></div><label>Treb</label><span class="eq-val" id="v-f9">0</span></div>
+                <div class="knob-wrap"><div class="knob-common small" id="k-f10" data-type="f10"></div><label>Air</label><span class="eq-val" id="v-f10">0</span></div>
+            </div>
+        </div>
+        
+        <div class="deck-separator"></div>
+        
+        <div class="deck-section vol-section">
+            <div class="deck-label" style="justify-content:center;">MASTER</div>
+            <div class="vol-wrapper" style="display:flex; flex-direction:column; align-items:center;">
+                <div class="knob-common large" id="k-vol" data-type="vol"></div>
+                <span id="v-vol-val">50%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="balance-container">
+        <div class="bal-header">
+            <span>Left</span>
+            <span id="bal-label" style="color:var(--primary);">CENTER</span>
+            <span>Right</span>
+        </div>
+        <div class="bal-controls">
+            <button onclick="toggleMuteSide('L')" id="btn-mute-l" class="btn-mute-side">MUTE L</button>
+            <input type="range" id="balanceSlider" min="-100" max="100" value="0" step="5" oninput="updateBalance(this.value)" ondblclick="resetBalance()">
+            <button onclick="toggleMuteSide('R')" id="btn-mute-r" class="btn-mute-side">MUTE R</button>
+        </div>
+    </div>
+
+    <div class="main-controls">
+        <button class="btn-ctl small" id="btn-shuf" onclick="ctl('shuffle')"><i class="fa-solid fa-shuffle"></i></button>
+        <button class="btn-ctl" onclick="ctl('prev')"><i class="fa-solid fa-backward-step"></i></button>
+        <button class="btn-ctl" onclick="ctl('stop')"><i class="fa-solid fa-stop"></i></button>
+        
+        <button class="btn-play" id="btn-play-pause" onclick="ctl('pause')">
+            <i class="fa-solid fa-play" id="pi"></i>
+        </button>
+        
+        <button class="btn-ctl" onclick="ctl('next')"><i class="fa-solid fa-forward-step"></i></button>
+        <button class="btn-ctl small" id="btn-loop" onclick="ctl('loop')"><i class="fa-solid fa-repeat"></i></button>
+    </div>
+
+    <div class="search-container">
+        <form onsubmit="searchYt(event)" class="url-form">
+            <input id="searchInput" class="search-input" placeholder="Search Song / Artist / URL..." autocomplete="off">
+            <button type="submit" class="btn-add"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </form>
+    </div>
+</div>
+
+<div id="pm" class="overlay">
+    <div class="overlay-header">
+        <h2>Media Center</h2>
+        <button onclick="tg('pm')" class="close-btn">&times;</button>
+    </div>
+    <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('lib')" id="tab-lib">FILES</button>
+        <button class="tab-btn" onclick="switchTab('pl')" id="tab-pl">SAVED</button>
+        <button class="tab-btn" onclick="switchTab('queue')" id="tab-queue">QUEUE</button>
+    </div>
+    
+    <div id="content-lib" class="tab-content" style="display:flex;">
+        <div class="manager-toolbar" style="flex-direction: column; gap: 5px;">
+            <div style="display:flex; gap:5px; width:100%;">
+                <div class="path-display">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <input id="scan-path" value="" onkeypress="handlePathKey(event)" placeholder="Loading...">
+                </div>
+                <button onclick="browsePath()" class="btn-refresh"><i class="fa-solid fa-arrow-right"></i></button>
+                <button onclick="setAsDefaultPath()" class="btn-refresh" style="background:#444;" title="Set as Start Folder">
+                    <i class="fa-solid fa-thumbtack"></i>
+                </button>
+            </div>
+            <div style="display:flex; gap:5px;">
+                <button onclick="jumpTo('/root')" class="btn-shortcut">Root</button>
+                <button onclick="jumpTo('/media')" class="btn-shortcut">Media</button>
+                <button onclick="jumpTo('/mnt')" class="btn-shortcut">Mnt</button>
+            </div>
+        </div>
+        <div id="lib-list" class="playlist-scroll"></div>
+    </div>
+    
+    <div id="content-pl" class="tab-content" style="display:none;">
+        <div class="playlist-form">
+            <input id="pl-name" class="search-input" placeholder="Name">
+            <input id="pl-url" class="search-input" placeholder="URL">
+            <button onclick="addPl()" class="btn-add"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <div id="pl-list" class="playlist-scroll"></div>
+    </div>
+    
+    <div id="content-queue" class="tab-content" style="display:none;">
+        <div class="manager-toolbar">
+            <span style="color:#aaa; font-size:0.8rem;">PLAYING NEXT</span>
+            <button onclick="clearQueue()" class="btn-shortcut" style="background:#444; margin-left:auto;">Clear All</button>
+        </div>
+        <div id="queue-list" class="playlist-scroll"></div>
+    </div>
+</div>
+
+<div id="om" class="output-overlay-compact">
+    <div class="output-box">
+        <div class="output-header-small">
+            <span>Audio Output</span>
+            <button onclick="tg('om')" class="close-icon">&times;</button>
+        </div>
+        <div class="output-options">
+            <button class="btn-out-compact" onclick="manualOut('jack')">
+                <i class="fa-solid fa-headphones"></i>
+                <div class="out-text"><strong>Line Out</strong><small>3.5mm Jack</small></div>
+            </button>
+            <button class="btn-out-compact" onclick="manualOut('hdmi')">
+                <i class="fa-solid fa-tv"></i>
+                <div class="out-text"><strong>HDMI</strong><small>TV Audio</small></div>
+            </button>
+            <button class="btn-out-compact" onclick="openBtManager()">
+                <i class="fa-brands fa-bluetooth-b"></i>
+                <div class="out-text"><strong>Bluetooth</strong><small>Manager</small></div>
+            </button>
+        </div>
+        
+        <div id="bt-manager-panel" style="display:none; margin-top:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <span style="font-size:0.8rem; color:#aaa;">AVAILABLE DEVICES</span>
+                <button onclick="scanBt()" class="btn-ctl tiny" style="width:auto; padding:2px 8px; font-size:10px;">SCAN</button>
+            </div>
+            <div id="bt-list" class="playlist-scroll" style="height:120px; border:1px solid rgba(255,255,255,0.1); border-radius:6px; margin-bottom:10px;">
+                <div style="padding:10px; text-align:center; color:#666; font-size:12px;">Click Scan to search...</div>
+            </div>
+            <div id="bt-status" style="font-size:10px; color:var(--primary); text-align:center;"></div>
+        </div>
+
+        <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 10px 0;"></div>
+        
+        <div class="output-header-small" style="background: transparent; padding-bottom: 5px;">
+            <span>System Mode</span>
+        </div>
+        <div class="output-options" style="flex-direction: row; gap: 10px; padding-top: 0;">
+            <button class="btn-out-compact" onclick="setPowerMode('portable')" style="flex: 1; justify-content: center; flex-direction: column; gap: 5px; text-align: center;">
+                <i class="fa-solid fa-person-hiking" style="font-size: 1.2rem; color: #ffd700;"></i>
+                <div class="out-text"><strong>Portable</strong></div>
+            </button>
+            <button class="btn-out-compact" onclick="setPowerMode('home')" style="flex: 1; justify-content: center; flex-direction: column; gap: 5px; text-align: center;">
+                <i class="fa-solid fa-house-signal" style="font-size: 1.2rem; color: var(--primary);"></i>
+                <div class="out-text"><strong>Home</strong></div>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="tm" class="output-overlay-compact">
+    <div class="output-box">
+        <div class="output-header-small">
+            <span>Sleep Timer</span>
+            <button onclick="tg('tm')" class="close-icon">&times;</button>
+        </div>
+        <div class="output-options">
+            <button class="btn-out-compact" onclick="setTimer(15)">
+                <i class="fa-regular fa-clock"></i>
+                <div class="out-text"><strong>15 Min</strong><small>Sleep soon</small></div>
+            </button>
+            <button class="btn-out-compact" onclick="setTimer(30)">
+                <i class="fa-solid fa-clock"></i>
+                <div class="out-text"><strong>30 Min</strong><small>Standard</small></div>
+            </button>
+            <button class="btn-out-compact" onclick="setTimer(60)">
+                <i class="fa-solid fa-hourglass-half"></i>
+                <div class="out-text"><strong>1 Hour</strong><small>Long play</small></div>
+            </button>
+            <button class="btn-out-compact" onclick="setTimer(0)" style="border:1px solid #ff4444;">
+                <i class="fa-solid fa-ban" style="color:#ff4444;"></i>
+                <div class="out-text"><strong>Disable</strong><small>Turn off timer</small></div>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="pr-om" class="output-overlay-compact">
+    <div class="output-box">
+        <div class="output-header-small">
+            <span>Equalizer Presets</span>
+            <button onclick="tg('pr-om')" class="close-icon">&times;</button>
+        </div>
+        <div id="preset-container" class="preset-grid-compact"></div>
+    </div>
+</div>
+
+<div id="search-popup" class="search-overlay">
+    <div class="search-modal">
+        <div class="modal-header">
+            <h3>Search Results</h3>
+            <button onclick="closeSearch()" class="close-btn">&times;</button>
+        </div>
+        <div id="popup-content" class="modal-body"></div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}?v=FINAL_V8"></script>
+<script>
+    // Register Service Worker untuk PWA
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register("{{ url_for('static', filename='sw.js') }}")
+                .then(reg => console.log('SW Registered!', reg.scope))
+                .catch(err => console.log('SW Fail:', err));
+        });
+    }
+</script>
+</body>
+</html>
