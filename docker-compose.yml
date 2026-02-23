@@ -1,6 +1,7 @@
 services:
   audioplayer:
     image: st4player
+    build: .
     container_name: openwrt-audioplayer
     restart: unless-stopped
     network_mode: "host"
