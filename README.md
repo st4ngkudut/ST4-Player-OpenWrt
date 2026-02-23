@@ -75,7 +75,7 @@ EOF
 Now, clone this repository and fire up Docker Compose.
 
 ```bash
-git clone [https://github.com/st4ngkudut/ST4-Player-OpenWrt.git]
+git clone https://github.com/st4ngkudut/ST4-Player-OpenWrt.git
 cd ST4-Player-OpenWrt
 
 # Build the image and run in detached mode
