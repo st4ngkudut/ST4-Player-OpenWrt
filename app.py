@@ -733,7 +733,7 @@ def search_yt():
     query = request.args.get('q', '')
     if not query: return jsonify([])
     try:
-        results = yt_music.search(query, filter="songs", limit=15)
+        results = yt_music.search(query, filter="videos", limit=30)
         data = []
         for r in results:
             thumb = r['thumbnails'][-1]['url'] if 'thumbnails' in r else ""
